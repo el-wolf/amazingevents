@@ -1,0 +1,62 @@
+#exampleFormControlTextarea1 {
+  resize: none;
+  overflow: hidden;
+}
+
+.card {
+  border: none;
+  border-radius: 0;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  background-color: #ffffff6b !important;
+  width: 4vw !important;
+  height: 4vh !important;
+  border-radius: 50%;
+  top: 50% !important;
+  transform: translateY(-50%);
+}
+
+.carousel-control-prev span,
+.carousel-control-next span {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+@media only screen and (min-width: 577px) {
+  .cards-w {
+    display: flex;
+  }
+
+  .card {
+    margin: 0 0.5em;
+    width: calc(100% / 3);
+  }
+
+  .image-w {
+    height: 22vw;
+    margin: 0 auto;
+  }
+}
+
+.image-w img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+@media only screen and (max-width: 567px) {
+  .card + .card {
+    display: none;
+  }
+
+  .searchbar {
+    width: 100%;
+  }
+
+  .carousel-control-prev,
+  .carousel-control-next {
+    width: 5vh !important;
+    height: 5vh !important;
+  }
+}
