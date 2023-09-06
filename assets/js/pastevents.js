@@ -1,5 +1,14 @@
 let events = data.events;
 
+const currentDate = new Date(data.currentDate);
+
+const pastEvents = events.filter(event => new Date(event.date) < currentDate);
+const upcomingEvents = events.filter(
+  event => new Date(event.date) >= currentDate
+);
+
+const noMatchingEventsMessage = document.getElementById("no-matching-events");
+
 const blankEvent = {
   image: "../images/not-found.png",
   name: "Nope",
@@ -9,19 +18,113 @@ const blankEvent = {
   detailsLink: "../images/not-found.png",
 };
 
+const categoriesContainer = document.getElementById("categories");
+const categoriesContentContainer =
+  document.getElementById("categories-content");
+const searchInput = categoriesContainer.querySelector("input[type='search']");
+
+const submitSearch = categoriesContainer.querySelector("button[type='submit']");
+
 events.sort(function (a, b) {
   return new Date(b.date) - new Date(a.date);
 });
 
-const currentDate = new Date(data.currentDate);
-
-const pastEvents = events.filter(event => new Date(event.date) < currentDate);
-const upcomingEvents = events.filter(
-  event => new Date(event.date) >= currentDate
-);
-
+createCategoryCheckboxes();
 generateEventCards(pastEvents);
 generateSmallScreenEventCards(pastEvents);
+
+const checkboxes = categoriesContentContainer.querySelectorAll(
+  "input[type='checkbox']"
+);
+
+// Función para crear las categorías
+function createCategoryCheckboxes() {
+  const addedCategories = [];
+
+  data.events.forEach(evento => {
+    const category = evento.category;
+
+    if (!addedCategories.includes(category)) {
+      addedCategories.push(category);
+
+      const checkboxDiv = document.createElement("div");
+      checkboxDiv.classList.add("form-check", "form-check-inline");
+
+      const checkboxId = evento._id;
+      const checkbox = document.createElement("input");
+      checkbox.classList.add("form-check-input");
+      checkbox.type = "checkbox";
+      checkbox.id = checkboxId;
+      checkbox.value = category;
+
+      const label = document.createElement("label");
+      label.classList.add("form-check-label");
+      label.setAttribute("for", checkboxId);
+      label.textContent = category;
+
+      checkboxDiv.appendChild(checkbox);
+      checkboxDiv.appendChild(label);
+
+      categoriesContentContainer.appendChild(checkboxDiv);
+    }
+  });
+}
+
+// Eventos de escucha
+submitSearch.addEventListener("click", function (event) {
+  event.preventDefault();
+  applyFilters();
+});
+
+categoriesContentContainer.addEventListener("change", function (event) {
+  if (event.target && event.target.type === "checkbox") {
+    console.log("Escuchado");
+    applyFilters();
+  }
+});
+
+// Función para aplicar filtros
+function applyFilters() {
+  const selectedCategories = Array.from(checkboxes)
+    .filter(checkbox => checkbox.checked)
+    .map(checkbox => checkbox.value);
+
+  const searchTerm = searchInput.value.toLowerCase().trim();
+
+  const filteredEvents = pastEvents.filter(event => {
+    const categoriesMatch =
+      selectedCategories.length === 0 ||
+      selectedCategories.includes(event.category);
+    const searchMatch =
+      event.name.toLowerCase().includes(searchTerm) ||
+      event.description.toLowerCase().includes(searchTerm);
+
+    return categoriesMatch && searchMatch;
+  });
+
+  if (filteredEvents.length === 0) {
+    noMatchingEventsMessage.style.display = "block";
+  } else {
+    noMatchingEventsMessage.style.display = "none";
+  }
+
+  updateEventCards(filteredEvents);
+}
+
+// Actualiza las tarjetas
+function updateEventCards(filteredEvents) {
+  const eventContainer = document.querySelector(".carousel-inner");
+  const indicatorsContainer = document.querySelector(".carousel-indicators");
+  const smallScreenCardsContainer = document.querySelector(".d-sm-none");
+
+  eventContainer.innerHTML = "";
+  indicatorsContainer.innerHTML = "";
+  smallScreenCardsContainer.innerHTML = "";
+
+  generateEventCards(filteredEvents);
+
+  generateSmallScreenEventCards(filteredEvents);
+}
 
 // Tarjetas
 function generateEventCards(events) {
@@ -71,7 +174,7 @@ function generateEventCards(events) {
       priceButton.textContent = `$${event.price}`;
       const detailsLink = document.createElement("a");
       detailsLink.className = "btn btn-primary";
-      detailsLink.href = "./assets/pages/details.html";
+      detailsLink.href = `./details.html?id=${event._id}`;
       detailsLink.textContent = "Details";
       buttonDiv.appendChild(priceButton);
       buttonDiv.appendChild(detailsLink);
@@ -146,7 +249,7 @@ function generateSmallScreenEventCards(events) {
     priceButton.textContent = `$${event.price}`;
 
     const detailsLink = document.createElement("a");
-    detailsLink.href = event.detailsLink;
+    detailsLink.href = `./details.html?id=${event._id}`;
     detailsLink.classList.add("btn", "btn-primary");
     detailsLink.textContent = "Details";
 
