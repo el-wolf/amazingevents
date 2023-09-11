@@ -44,48 +44,65 @@
                 </div>
             </div>
         </nav>
-        <div class="container-fluid text-bg-dark pt-3 d-flex justify-content-center">
+        <div class="container-fluid text-bg-dark pt-1 d-flex justify-content-center">
             <h1 class="fs-1">CONTACT US</h1>
         </div>
     </header>
 
 
     <main class="contact-main">
-        
+
         <div class="container d-flex justify-content-center px-5 mt-3">
             <div class="container row">
                 <form class="d-flex flex-column gap-3">
                     <div class="form-group">
                         <label for="exampleFormControlInput1" class="form-label">Name</label>
                         <input type="text" autocomplete="name" class="form-control" id="exampleFormControlInput1"
-                            placeholder="Juan Perez">
+                            placeholder="Juan Perez" required>
                     </div>
                     <div class="form-group">
-                      <label for="exampleInputEmail1">Email address</label>
-                      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="juanperez@hotmail.com">
+                        <label for="exampleInputEmail1">Email address</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                            placeholder="juanperez@hotmail.com" required>
                     </div>
                     <div class="mb-3">
                         <label for="exampleFormControlTextarea1" class="form-label">Message:</label>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Your message here..."></textarea>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                            placeholder="Your message here..." required></textarea>
+                    </div>
+                    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="toast-header">
+                                <img src="../images/favicon.png" class="rounded me-2 img-fluid" alt="..." width="20"
+                                    height="20">
+                                <strong class="me-auto">Amazing Events</strong>
+                                <button type="button" class="btn-close" data-bs-dismiss="toast"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="toast-body">
+                                <p>Your message has been sent.</p>
+                            </div>
+                        </div>
                     </div>
                     <div class="mb-3 d-flex justify-content-end">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" id="sbmt" class="btn btn-primary">Submit</button>
                     </div>
-                  </form>
+                </form>
             </div>
         </div>
 
     </main>
 
-    <footer class="d-flex flex-wrap justify-content-between py-3 my-4 border-top">
+    <footer class="d-flex flex-wrap justify-content-between pt-3 mt-4 border-top">
 
         <ul class="nav col-md-4 ms-2 list-unstyled d-flex">
-            <li class="ms-3"><a class="text-body-secondary" href="https://api.whatsapp.com/message/ZRBZ3MQGLPTIB1?autoload=1&app_absent=0"><img src="../images/whatsapp.png" alt="Whatsapp"
-                        width="25" height="25"></a></li>
-            <li class="ms-3"><a class="text-body-secondary" href="https://www.facebook.com/MindHubLa"><img src="../images/facebook.png" alt="Facebook"
-                        width="25" height="25"></a></li>
-            <li class="ms-3"><a class="text-body-secondary" href="https://www.instagram.com/mindhub_la/"><img src="../images/instagram.png" alt="Instagram"
-                        width="25" height="25"></a></li>
+            <li class="ms-3"><a class="text-body-secondary"
+                    href="https://api.whatsapp.com/message/ZRBZ3MQGLPTIB1?autoload=1&app_absent=0"><img
+                        src="../images/whatsapp.png" alt="Whatsapp" width="25" height="25"></a></li>
+            <li class="ms-3"><a class="text-body-secondary" href="https://www.facebook.com/MindHubLa"><img
+                        src="../images/facebook.png" alt="Facebook" width="25" height="25"></a></li>
+            <li class="ms-3"><a class="text-body-secondary" href="https://www.instagram.com/mindhub_la/"><img
+                        src="../images/instagram.png" alt="Instagram" width="25" height="25"></a></li>
         </ul>
 
         <div class="col-md-4 d-flex me-5 justify-content-end">
@@ -97,10 +114,10 @@
 
     </footer>
 
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
+    <script src="../js/contact.js"></script>
 </body>
 
 </html>

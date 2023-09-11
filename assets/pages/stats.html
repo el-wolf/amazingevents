@@ -47,34 +47,47 @@
         <div class="container-fluid text-bg-dark pt-3 d-flex justify-content-center">
             <h1 class="fs-1">STATS</h1>
         </div>
+
     </header>
 
 
-    <main>
+    <main class="contact-main">
+
         <div class="d-flex flex-column mt-0 pt-0 container justify-content-center w-75">
+
             <table class="table table-hover table-striped">
-                <thead class="">
+                <thead>
                     <tr>
-                        <th class="table-secondary ps-3" colspan="3">Events Statistics</th>
+                        <th class="table-secondary ps-3" colspan="3">Events Statistics <div id="loading-spinner"
+                                class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </th>
                     </tr>
                     <tr>
+
                         <th class="col-4 text-center">Events with highest % of assistence</th>
                         <th class="col-4 text-center">Events with lowest % of assistence</th>
                         <th class="col-4 text-center">Events with larger capacity</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr id="eventsStatistics">
+
+                        <!-- <td class="text-center">---</td>
                         <td class="text-center">---</td>
-                        <td class="text-center">---</td>
-                        <td class="text-center">---</td>
+                        <td class="text-center">---</td> -->
                     </tr>
                 </tbody>
             </table>
             <table class="table table-hover table-striped">
-                <thead class="">
+                <thead>
                     <tr>
-                        <th class="table-secondary ps-3" colspan="3">Upcoming events statistics by category</th>
+                        <th class="table-secondary ps-3" colspan="3">Upcoming events statistics by category <div
+                                id="loading-spinner2" class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </th>
                     </tr>
                     <tr>
                         <th class="col-4 text-center">Categories</th>
@@ -82,18 +95,18 @@
                         <th class="col-4 text-center">Percentage of assistance</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td class="text-center">---</td>
-                        <td class="text-center">---</td>
-                        <td class="text-center">---</td>
-                    </tr>
+                <tbody id="upcomingEventsStatistics">
+
                 </tbody>
             </table>
             <table class="table table-hover table-striped">
                 <thead class="">
                     <tr>
-                        <th class="table-secondary ps-3" colspan="3">Past events statistics by category</th>
+                        <th class="table-secondary ps-3" colspan="3">Past events statistics by category <div
+                                id="loading-spinner3" class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </th>
                     </tr>
                     <tr>
                         <th class="col-4 text-center">Categories</th>
@@ -101,12 +114,8 @@
                         <th class="col-4 text-center">Percentage of assistance</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td class="text-center">---</td>
-                        <td class="text-center">---</td>
-                        <td class="text-center">---</td>
-                    </tr>
+                <tbody id="pastEventsStatistics">
+
                 </tbody>
             </table>
 
@@ -115,7 +124,7 @@
 
     </main>
 
-    <footer class="d-flex flex-wrap justify-content-between py-3 my-4 border-top">
+    <footer class="d-flex flex-wrap justify-content-between py-3 mt-4 border-top">
 
         <ul class="nav col-md-4 ms-2 list-unstyled d-flex">
             <li class="ms-3"><a class="text-body-secondary"
@@ -138,6 +147,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
+    <script src="../js/stats.js"></script>
 </body>
 
 </html>

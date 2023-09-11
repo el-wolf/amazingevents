@@ -1,11 +1,9 @@
-let events = data.events;
-
-const currentDate = new Date(data.currentDate);
-
-const pastEvents = events.filter(event => new Date(event.date) < currentDate);
-const upcomingEvents = events.filter(
-  event => new Date(event.date) >= currentDate
-);
+let data = {};
+let events = [];
+let checkboxes = [];
+let currentDate;
+let pastEvents;
+let upcomingEvents;
 
 const noMatchingEventsMessage = document.getElementById("no-matching-events");
 
@@ -22,22 +20,48 @@ const categoriesContainer = document.getElementById("categories");
 const categoriesContentContainer =
   document.getElementById("categories-content");
 const searchInput = categoriesContainer.querySelector("input[type='search']");
-
 const submitSearch = categoriesContainer.querySelector("button[type='submit']");
 
-events.sort(function (a, b) {
-  return new Date(b.date) - new Date(a.date);
-});
+function fetchData() {
+  showSpinner();
+  return fetch("https://mindhub-xj03.onrender.com/api/amazing")
+    .then(response => response.json())
+    .then(datos => {
+      data = datos;
+      events = data.events;
+      currentDate = new Date(data.currentDate);
+      pastEvents = events.filter(event => new Date(event.date) < currentDate);
+      upcomingEvents = events.filter(
+        event => new Date(event.date) >= currentDate
+      );
 
-createCategoryCheckboxes();
-generateEventCards(pastEvents);
-generateSmallScreenEventCards(pastEvents);
+      createCategoryCheckboxes();
+      generateEventCards(pastEvents);
+      generateSmallScreenEventCards(pastEvents);
 
-const checkboxes = categoriesContentContainer.querySelectorAll(
-  "input[type='checkbox']"
-);
+      checkboxes = categoriesContentContainer.querySelectorAll(
+        "input[type='checkbox']"
+      );
 
-// Función para crear las categorías
+      submitSearch.addEventListener("click", function (event) {
+        event.preventDefault();
+        applyFilters();
+      });
+
+      categoriesContentContainer.addEventListener("change", function (event) {
+        if (event.target && event.target.type === "checkbox") {
+          applyFilters();
+        }
+      });
+      hideSpinner();
+    })
+    .catch(error => {
+      console.log(" ////// ERROR ////// " + error);
+    });
+}
+
+fetchData();
+
 function createCategoryCheckboxes() {
   const addedCategories = [];
 
@@ -70,63 +94,6 @@ function createCategoryCheckboxes() {
   });
 }
 
-// Eventos de escucha
-submitSearch.addEventListener("click", function (event) {
-  event.preventDefault();
-  applyFilters();
-});
-
-categoriesContentContainer.addEventListener("change", function (event) {
-  if (event.target && event.target.type === "checkbox") {
-    console.log("Escuchado");
-    applyFilters();
-  }
-});
-
-// Función para aplicar filtros
-function applyFilters() {
-  const selectedCategories = Array.from(checkboxes)
-    .filter(checkbox => checkbox.checked)
-    .map(checkbox => checkbox.value);
-
-  const searchTerm = searchInput.value.toLowerCase().trim();
-
-  const filteredEvents = pastEvents.filter(event => {
-    const categoriesMatch =
-      selectedCategories.length === 0 ||
-      selectedCategories.includes(event.category);
-    const searchMatch =
-      event.name.toLowerCase().includes(searchTerm) ||
-      event.description.toLowerCase().includes(searchTerm);
-
-    return categoriesMatch && searchMatch;
-  });
-
-  if (filteredEvents.length === 0) {
-    noMatchingEventsMessage.style.display = "block";
-  } else {
-    noMatchingEventsMessage.style.display = "none";
-  }
-
-  updateEventCards(filteredEvents);
-}
-
-// Actualiza las tarjetas
-function updateEventCards(filteredEvents) {
-  const eventContainer = document.querySelector(".carousel-inner");
-  const indicatorsContainer = document.querySelector(".carousel-indicators");
-  const smallScreenCardsContainer = document.querySelector(".d-sm-none");
-
-  eventContainer.innerHTML = "";
-  indicatorsContainer.innerHTML = "";
-  smallScreenCardsContainer.innerHTML = "";
-
-  generateEventCards(filteredEvents);
-
-  generateSmallScreenEventCards(filteredEvents);
-}
-
-// Tarjetas
 function generateEventCards(events) {
   const eventContainer = document.querySelector(".carousel-inner");
   const indicatorsContainer = document.querySelector(".carousel-indicators");
@@ -149,6 +116,10 @@ function generateEventCards(events) {
       const card = document.createElement("div");
       card.className = "card border-dark";
 
+      if (event === blankEvent) {
+        card.classList.add("blank-event");
+      }
+
       const imageContainer = document.createElement("div");
       imageContainer.className = "image-w";
       const image = document.createElement("img");
@@ -165,7 +136,7 @@ function generateEventCards(events) {
       title.textContent = event.name;
       const description = document.createElement("p");
       description.className = "card-text";
-      description.textContent = event.description;
+      description.textContent = `${event.description.slice(0, 80)}...`;
       const buttonDiv = document.createElement("div");
       buttonDiv.className = "d-flex justify-content-between p-3";
       const priceButton = document.createElement("button");
@@ -209,9 +180,8 @@ function generateEventCards(events) {
   eventContainer.firstElementChild.classList.add("active");
 }
 
-//Tarjetitas
 function generateSmallScreenEventCards(events) {
-  const cardsContainer = document.querySelector(".d-sm-none");
+  const cardsContainer = document.getElementById("sm-main-content");
   cardsContainer.classList.add("flex-column");
 
   for (const event of events) {
@@ -267,4 +237,64 @@ function generateSmallScreenEventCards(events) {
 
     cardsContainer.appendChild(card);
   }
+}
+
+function applyFilters() {
+  const selectedCategories = Array.from(checkboxes)
+    .filter(checkbox => checkbox.checked)
+    .map(checkbox => checkbox.value);
+
+  const searchTerm = searchInput.value.toLowerCase().trim();
+
+  const filteredEvents = pastEvents.filter(event => {
+    const categoriesMatch =
+      selectedCategories.length === 0 ||
+      selectedCategories.includes(event.category);
+
+    const nameMatch = event.name.toLowerCase().includes(searchTerm);
+    const descriptionMatch = event.description
+      .toLowerCase()
+      .includes(searchTerm);
+
+    return categoriesMatch && (nameMatch || descriptionMatch);
+  });
+
+  noMatchingEventsMessage.style.display =
+    filteredEvents.length === 0 ? "block" : "none";
+
+  updateEventCards(filteredEvents);
+}
+
+function updateEventCards(filteredEvents) {
+  const eventContainer = document.querySelector(".carousel-inner");
+  const indicatorsContainer = document.querySelector(".carousel-indicators");
+  const smallScreenCardsContainer = document.getElementById("sm-main-content");
+
+  eventContainer.innerHTML = "";
+  indicatorsContainer.innerHTML = "";
+  smallScreenCardsContainer.innerHTML = "";
+
+  generateEventCards(filteredEvents);
+  generateSmallScreenEventCards(filteredEvents);
+}
+
+function showSpinner() {
+  const spinnerContainer = document.getElementById("spinner-container");
+  const loadingSpinner = document.getElementById("loading-spinner");
+  const loadingSpinnerSm = document.getElementById("loading-spinner-sm");
+
+  spinnerContainer.style.display = "block";
+  loadingSpinner.style.display = "block";
+  loadingSpinnerSm.style.display = "block";
+}
+
+function hideSpinner() {
+  const spinnerContainer = document.getElementById("spinner-container");
+  const loadingSpinner = document.getElementById("loading-spinner");
+  const loadingSpinnerSm = document.getElementById("loading-spinner-sm");
+
+  spinnerContainer.style.display = "none";
+  loadingSpinner.style.display = "none";
+  loadingSpinnerSm.style.display = "none";
+  spinnerContainer.classList.remove("p-5");
 }
