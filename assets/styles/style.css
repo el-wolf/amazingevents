@@ -68,6 +68,10 @@ main {
     height: 22vw;
     margin: 0 auto;
   }
+
+  .div1 {
+    width: 75% !important;
+  }
 }
 
 .image-w img {
@@ -86,6 +90,8 @@ main {
     height: 5vh !important;
   }
 }
+
+
 
 .blank-card {
   background-color: transparent !important; /* Fondo transparente */
