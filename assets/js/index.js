@@ -280,7 +280,9 @@ function showSpinner() {
   const spinnerContainer = document.getElementById("spinner-container");
   const loadingSpinner = document.getElementById("loading-spinner");
   const loadingSpinnerSm = document.getElementById("loading-spinner-sm");
+  const indexContainer = document.getElementById("index-main");
 
+  indexContainer.style.display= "none";
   spinnerContainer.style.display = "block";
   loadingSpinner.style.display = "block";
   loadingSpinnerSm.style.display = "block";
@@ -290,7 +292,9 @@ function hideSpinner() {
   const spinnerContainer = document.getElementById("spinner-container");
   const loadingSpinner = document.getElementById("loading-spinner");
   const loadingSpinnerSm = document.getElementById("loading-spinner-sm");
+  const indexContainer = document.getElementById("index-main");
 
+  indexContainer.style.display= "block";
   spinnerContainer.style.display = "none";
   loadingSpinner.style.display = "none";
   loadingSpinnerSm.style.display = "none";
